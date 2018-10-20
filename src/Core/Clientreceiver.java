@@ -1,6 +1,9 @@
+package Core;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.Socket;
+
+import static Util.Printstr.print;
 
 public class Clientreceiver implements Runnable{
 
@@ -14,7 +17,7 @@ public class Clientreceiver implements Runnable{
 
     @Override
     public void run() {
-        // Lobby.currentstring("Start client receiver....");
+        // Core.Lobby.currentstring("Start client receiver....");
         // String getmessage;
         int recvMsgSize;
         byte byteBuffer[] = new byte[1024];
@@ -28,7 +31,7 @@ public class Clientreceiver implements Runnable{
             }
 
         } catch (IOException e) {
-            Lobby.currentstring("client socket out");
+            print("client socket out");
         }
 
     }

@@ -1,6 +1,10 @@
+package Core;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+
+import static Util.Printstr.print;
 
 public class Group implements Runnable{
 
@@ -31,7 +35,7 @@ public class Group implements Runnable{
 
     @Override
     public void run() {
-        Lobby.currentstring("Start Group1 Sender....");
+        print("Start Group1 Sender....");
         try{
             while (!Thread.interrupted()){
                 if(mesglen > 0){
@@ -42,7 +46,7 @@ public class Group implements Runnable{
                 Thread.sleep(10);
             }
         } catch (InterruptedException e) {
-            Lobby.currentstring("Group exit....");
+            print("Core.Group exit....");
         }
         terminate();
     }
@@ -54,7 +58,7 @@ public class Group implements Runnable{
             } catch (IOException e) {
             }
         }
-        Lobby.currentstring("End Group1 Sender");
+        print("End Group1 Sender");
     }
 
     private void sendall(){

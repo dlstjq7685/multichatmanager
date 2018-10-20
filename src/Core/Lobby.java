@@ -1,8 +1,11 @@
+package Core;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.net.ServerSocket;
-import java.util.Date;
+
+import static Util.Printstr.print;
 
 public class Lobby implements Runnable {
 
@@ -10,7 +13,6 @@ public class Lobby implements Runnable {
     private Group group1;
     private Thread gt;
     private final int port = 8000;
-    private static Date now;
 
     {
         group1 = new Group("first");
@@ -18,21 +20,21 @@ public class Lobby implements Runnable {
         try {
             servSock = new ServerSocket(port);
         } catch (IOException e) {
-            System.out.println("Couldn't open socket port");
+            print("Couldn't open socket port");
         }
     }
 
     @Override
     public void run() {
 
-        currentstring("Open port & Running server");
+        print("Open port & Running server");
         Socket clntSock;
         try{
             gt.start();
 
             while (!Thread.interrupted()) {
                 clntSock = servSock.accept();
-                currentstring("came to : " + clntSock.getInetAddress().getHostAddress());
+                print("came to : " + clntSock.getInetAddress().getHostAddress());
 
                 if(Console.flag){
                     InputStream in = clntSock.getInputStream();
@@ -45,21 +47,15 @@ public class Lobby implements Runnable {
             }
         }
         catch (InterruptedException e){ }
-        catch (IOException e){ System.out.println("socket error"); }
+        catch (IOException e){ print("socket error"); }
 
         terminate();
-    }
-
-    public static void currentstring(String str){
-        now = new Date();
-        System.out.println(now.toString() + "] " + str);
     }
 
     private void terminate(){
         try {
             servSock.close();
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
         gt.interrupt();
@@ -68,6 +64,6 @@ public class Lobby implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        currentstring("lobby exit");
+        print("lobby exit");
     }
 }

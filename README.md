@@ -2,5 +2,5 @@
 multi chat server java cui api
 
 TODO List   
-- Group object management   
-- Console commend add / fix      
+- Core.Group object management
+- Core.Console commend add / fix

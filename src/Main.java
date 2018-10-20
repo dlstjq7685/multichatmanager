@@ -1,7 +1,7 @@
+import Core.Console;
+import static Util.Printstr.print;
 import java.io.IOException;
 
-// error
-// static values memory leak
 public class Main {
 
     public static void main(String[] args) throws IOException {
@@ -9,6 +9,7 @@ public class Main {
         Console main = new Console();
         Thread t =  new Thread(main,"main consol");
         t.start();
+        print("Start main");
 
         try {
             t.join();
