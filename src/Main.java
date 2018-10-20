@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Consol main = new Consol();
+        Console main = new Console();
         Thread t =  new Thread(main,"main consol");
         t.start();
 

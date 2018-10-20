@@ -34,7 +34,7 @@ public class Lobby implements Runnable {
                 clntSock = servSock.accept();
                 currentstring("came to : " + clntSock.getInetAddress().getHostAddress());
 
-                if(Consol.flag){
+                if(Console.flag){
                     InputStream in = clntSock.getInputStream();
                     Clientreceiver rec = new Clientreceiver(in, group1);
                     group1.setMembers(clntSock);
