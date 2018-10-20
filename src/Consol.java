@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class Consol implements Runnable{
@@ -7,8 +8,9 @@ public class Consol implements Runnable{
     private Thread l;
     private Lobby lobby;
     private Scanner scanner;
-
+    public static boolean flag;
     Consol(){
+        flag = true;
         lobby = new Lobby();
         l = new Thread(lobby);
         scanner = new Scanner(System.in);
@@ -27,13 +29,24 @@ public class Consol implements Runnable{
         } catch (Exception e){
         }
 
+        Lobby.currentstring("console end....");
         terminate();
-        System.out.println("console end");
-
+        Lobby.currentstring("System terminate");
     }
 
     private void terminate(){
+        Lobby.currentstring("Waitting Lobby termination.....");
         l.interrupt();
+
+        Lobby.currentstring("dump client running.....");
+        try {
+            flag = false;
+            Socket dc = new Socket("localhost", 8000);
+            dc.close();
+        } catch (IOException e) {
+        }
+        Lobby.currentstring("dump client out...");
+
         try {
             l.join();
         } catch (InterruptedException e) {
@@ -43,6 +56,7 @@ public class Consol implements Runnable{
         l = null;
         lobby = null;
         scanner = null;
+
     }
 
     private void switchloop(String in){
