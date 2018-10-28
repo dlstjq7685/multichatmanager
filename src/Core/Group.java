@@ -13,10 +13,13 @@ public class Group implements Runnable{
     private int mesglen;
     private int _members;
     private String name;
+    private Group[] groups;
 
     {
         _members = 0;
         members = new Socket[50];
+        groups = new Group[10];
+
     }
 
     Group(String gname){
@@ -28,14 +31,23 @@ public class Group implements Runnable{
         _members++;
     }
 
+    public void resetMembers(Socket member){
+        
+    }
+
+
     public void setMesg(byte[] mesg, int len) {
         this.mesg = mesg;
         this.mesglen = len;
     }
 
+    public void setGroups(Group[] groups){
+        this.groups = groups;
+    }
+
     @Override
     public void run() {
-        print("Start Group1 Sender....");
+        print("Start " + name + " Sender....");
         try{
             while (!Thread.interrupted()){
                 if(mesglen > 0){
@@ -46,7 +58,7 @@ public class Group implements Runnable{
                 Thread.sleep(10);
             }
         } catch (InterruptedException e) {
-            print("Core.Group exit....");
+            print(name +  " exit....");
         }
         terminate();
     }
@@ -58,7 +70,7 @@ public class Group implements Runnable{
             } catch (IOException e) {
             }
         }
-        print("End Group1 Sender");
+        print("End "+ name + " Sender");
     }
 
     private void sendall(){

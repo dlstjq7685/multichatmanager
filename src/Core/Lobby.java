@@ -6,17 +6,29 @@ import java.net.Socket;
 import java.net.ServerSocket;
 
 import static Util.Printstr.print;
-
+/*
+    Lobby Group: group[0];
+    Another Groups: cheat group
+*/
 public class Lobby implements Runnable {
 
     private ServerSocket servSock;
-    private Group group1;
-    private Thread gt;
+    private Group[] groups;
+    private Thread[] gt;
     private final int port = 8000;
 
     {
-        group1 = new Group("first");
-        gt = new Thread(group1);
+        gt = new Thread[10];
+        groups = new Group[10];
+
+        for(int i = 0; i < 10; i ++){
+            groups[i] = new Group(  "Group " + (i + 1));
+            gt[i] = new Thread(groups[i]);
+        }
+
+        for(int i = 0; i < 10; i++)
+            groups[i].setGroups(groups);
+
         try {
             servSock = new ServerSocket(port);
         } catch (IOException e) {
@@ -28,18 +40,19 @@ public class Lobby implements Runnable {
     public void run() {
 
         print("Open port & Running server");
-        Socket clntSock;
+        Socket clientSock;
         try{
-            gt.start();
+            for(int i = 0; i < 10; i++)
+                gt[i].start();
 
             while (!Thread.interrupted()) {
-                clntSock = servSock.accept();
-                print("came to : " + clntSock.getInetAddress().getHostAddress());
+                clientSock = servSock.accept();
+                print("Came to : " + clientSock.getInetAddress().getHostAddress());
 
                 if(Console.flag){
-                    InputStream in = clntSock.getInputStream();
-                    Clientreceiver rec = new Clientreceiver(in, group1);
-                    group1.setMembers(clntSock);
+                    InputStream in = clientSock.getInputStream();
+                    Clientreceiver rec = new Clientreceiver(in, groups,0);
+                    groups[0].setMembers(clientSock);
                     Thread t = new Thread(rec);
                     t.start();
                 }
@@ -58,12 +71,15 @@ public class Lobby implements Runnable {
         } catch (IOException e) {
         }
 
-        gt.interrupt();
+        for(int i = 0; i < 10; i++){
+            gt[i].interrupt();
+        }
         try {
-            gt.join();
+            for(int i = 0; i < 10; i++)
+                gt[i].join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        print("lobby exit");
+        print("Lobby exit");
     }
 }

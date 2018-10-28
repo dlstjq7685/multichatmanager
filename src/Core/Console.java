@@ -38,7 +38,7 @@ public class Console implements Runnable{
     }
 
     private void terminate(){
-        print("Waitting Core.Lobby termination.....");
+        print("Waitting Lobby termination.....");
         l.interrupt();
 
         print("dump client running.....");
