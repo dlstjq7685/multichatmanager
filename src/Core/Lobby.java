@@ -50,8 +50,7 @@ public class Lobby implements Runnable {
                 print("Came to : " + clientSock.getInetAddress().getHostAddress());
 
                 if(Console.flag){
-                    InputStream in = clientSock.getInputStream();
-                    Clientreceiver rec = new Clientreceiver(in, groups,0);
+                    Clientreceiver rec = new Clientreceiver(groups,0,clientSock);
                     groups[0].setMembers(clientSock);
                     Thread t = new Thread(rec);
                     t.start();

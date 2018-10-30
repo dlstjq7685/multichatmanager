@@ -1,5 +1,7 @@
 package Core;
 
+import sun.reflect.generics.scope.Scope;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -31,10 +33,15 @@ public class Group implements Runnable{
         _members++;
     }
 
-    public void resetMembers(Socket member){
-        
+    public Socket getMembers(Socket mem){
+        for(int i = 0; i < _members; i++){
+            if(members[i].equals(mem)){
+                members[i] = null;
+                return mem;
+            }
+        }
+        return null;
     }
-
 
     public void setMesg(byte[] mesg, int len) {
         this.mesg = mesg;
@@ -68,9 +75,27 @@ public class Group implements Runnable{
             try {
                 members[i].close();
             } catch (IOException e) {
+            } catch (NullPointerException e){
             }
         }
         print("End "+ name + " Sender");
+    }
+
+    private void collect(){
+
+        int d_ = 0;
+        Socket[] d = new Socket[50];
+
+        for(int i = 0; i < _members; i++){
+
+            if(members[i] != null){
+                d[d_] = members[i];
+                d_++;
+            }
+        }
+
+        members = d;
+        _members = d_;
     }
 
     private void sendall(){
@@ -92,6 +117,9 @@ public class Group implements Runnable{
                 members = dump;
                 _members = dumplen;
                 break;
+            }catch (NullPointerException e){
+                collect();
+                print(name + " Collect");
             }
         }
     }
